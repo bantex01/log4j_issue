@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" packages="io.opentelemetry.instrumentation.log4j.appender.v2_17">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - CONSOLE - %msg%n"/>-->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - CONSOLE - trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} - %msg - %X%n"/>
+        </Console>
+
+        <OpenTelemetry name="OpenTelemetryAppender" captureMapMessageAttributes="true" captureMarkerAttribute="true" captureContextDataAttributes="*">
+            <!-- Only allow ERROR level logs to OpenTelemetryAppender -->
+            <!--<ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>-->
+            <!--<PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>-->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} trace_id=%X{trace_id} span_id=%X{span_id} trace_flags=%X{trace_flags} - %msg - %X%n"/>
+        </OpenTelemetry>
+    </Appenders>
+    
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="OpenTelemetryAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
